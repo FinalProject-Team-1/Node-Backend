@@ -24,19 +24,6 @@ jobs:
       id: set-image-uri
       run: echo "IMAGE_URI=${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
 
-    - name: Extract REGISTRY_IP from REGISTRY_URL
-      id: extract-registry-ip
-      run: |
-        REGISTRY_URL=${{ secrets.REGISTRY_URL }}
-        REGISTRY_DOMAIN=$(echo $REGISTRY_URL | cut -d ':' -f 1)
-        REGISTRY_IP=$(ping -c 1 $REGISTRY_DOMAIN | grep "PING" | awk '{print $3}' | tr -d '()')
-        if [ -z "${REGISTRY_IP}" ]; then
-          echo "REGISTRY_IP is not set."
-          exit 1
-        fi
-        echo "::add-mask::${REGISTRY_IP}"
-        echo "REGISTRY_NPM_URL=http://${REGISTRY_IP}:8081/repository/team1-npm-proxy" >> $GITHUB_ENV
-
     - name: Docker Login
       uses: docker/login-action@v3.3.0
       with:
@@ -45,7 +32,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build the Docker image
-      run: docker build . --tag ${{ env.IMAGE_URI }} --build-arg REGISTRY_NPM_URL=${{ env.REGISTRY_NPM_URL }} || { echo 'Build failed!'; exit 1; }
+      run: docker build . --tag ${{ env.IMAGE_URI }} || { echo 'Build failed!'; exit 1; }
 
     - name: Run the Docker container
       run: docker run -d --name ${{ env.CONTAINER_NAME }} -p ${{ env.CONTAINER_PORT }}:${{ env.CONTAINER_PORT }} ${{ env.IMAGE_URI }} || { echo 'Run failed!'; exit 1; }

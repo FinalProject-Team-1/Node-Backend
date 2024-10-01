@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 USER root
 
 # 저장소 설정
-ARG REGISTRY_NPM_URL
-RUN npm set registry $REGISTRY_NPM_URL
+# ARG REGISTRY_NPM_URL
+# RUN npm set registry $REGISTRY_NPM_URL
 
 # 패키지 설치
 COPY --chown=node:node package*.json ./
