@@ -39,12 +39,11 @@ jobs:
       with:
         image-ref: ${{ env.IMAGE_URI }}
         format: 'table'
-        exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
         scan-type: 'light'  # 'full' or 'light'
-
+    
     - name: Run the Docker container
       run: docker run -d --name ${{ env.CONTAINER_NAME }} -p ${{ env.CONTAINER_PORT }}:${{ env.CONTAINER_PORT }} ${{ env.IMAGE_URI }} || { echo 'Run failed!'; exit 1; }
 
