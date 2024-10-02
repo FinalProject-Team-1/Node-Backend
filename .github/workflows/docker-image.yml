@@ -39,7 +39,6 @@ jobs:
       with:
         image-ref: ${{ env.IMAGE_URI }}
         format: 'table'
-        ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
         scan-type: 'light'  # 'full' or 'light'
