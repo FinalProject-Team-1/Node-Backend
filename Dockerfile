@@ -15,7 +15,7 @@ RUN npm install --production
 RUN npm install -g pm2
 
 # PM2 관련 디렉터리 생성 및 권한 설정
-RUN mkdir -p /home/node/.pm2 && chown -R node:node /home/node/.pm2
+RUN mkdir -p /usr/src/app/.pm2 && chown -R node:node /usr/src/app/.pm2
 
 # 사용자 전환
 USER node
