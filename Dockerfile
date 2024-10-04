@@ -21,7 +21,7 @@ RUN mkdir -p /home/node/.pm2 && chown -R node:node /home/node/.pm2
 USER node
 
 # PM2 홈 디렉터리 환경변수 설정
-ENV PM2_HOME=/home/node/.pm2
+ENV PM2_HOME=/usr/src/app/.pm2
 
 # 코드
 COPY --chown=node:node . .
