@@ -74,8 +74,21 @@ jobs:
         name: Push the Docker image
         run: docker push ${{ env.IMAGE_URI }}
 
+      -
+        name: Cleanup
+        if: always()
+        run: |
+          docker stop ${{ env.CONTAINER_NAME }} || echo "Container not running or already stopped."
+          docker rm ${{ env.CONTAINER_NAME }} || echo "Container not found."
+          dangling_images=$(docker images -f "dangling=true" -q)
+          if [ -n "$dangling_images" ]; then
+            docker rmi $dangling_images || echo "Failed to remove dangling images."
+          else
+            echo "No dangling images to remove."
+          fi
+
   CD:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: ["CI"]
     steps:
       -
@@ -97,4 +110,3 @@ jobs:
           else
             echo "No dangling images to remove."
           fi
-          
